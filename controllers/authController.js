@@ -65,3 +65,7 @@ export const loginController = async (req, res) => {
     return messageHandler(res, 500, "Server Error");
   }
 };
+
+export const testController = (req, res) => {
+  res.json({ msg: "This Is Authenticated Route" });
+};

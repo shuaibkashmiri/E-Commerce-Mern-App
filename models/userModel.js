@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema(
     address: {
       type: String,
     },
+
+    role: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
