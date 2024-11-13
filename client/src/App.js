@@ -6,6 +6,7 @@ import Policy from "./pages/Policy";
 import Pagenotfound from "./pages/Pagenotfound";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
