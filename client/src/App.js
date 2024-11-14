@@ -6,7 +6,8 @@ import Policy from "./pages/Policy";
 import Pagenotfound from "./pages/Pagenotfound";
 import Register from "./pages/Auth/Register";
 import Login from "./pages/Auth/Login";
-import "react-toastify/dist/ReactToastify.css";
+import PrivateRoute from "./components/Routes/Private";
+import Dashboard from "./pages/user/Dashboard";
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<PrivateRoute />}>
+          <Route path="" element={<Dashboard />} />
+        </Route>
 
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
