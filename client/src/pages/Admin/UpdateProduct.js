@@ -18,6 +18,7 @@ const UpdateProduct = () => {
   const [quantity, setQuantity] = useState("");
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
+  const [sizes, setSizes] = useState("");
   const [id, setId] = useState("");
 
   //get single product
@@ -34,6 +35,7 @@ const UpdateProduct = () => {
       setQuantity(data.product.quantity);
       setShipping(data.product.shipping);
       setCategory(data.product.category._id);
+      setSizes(data.product.sizes);
     } catch (error) {
       console.log(error);
     }
@@ -70,6 +72,7 @@ const UpdateProduct = () => {
       productData.append("quantity", quantity);
       photo && productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("sizes", sizes);
       const { data } = axios.put(
         `/api/v1/product/update-product/${id}`,
         productData

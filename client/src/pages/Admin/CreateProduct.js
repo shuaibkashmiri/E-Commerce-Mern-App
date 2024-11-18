@@ -15,6 +15,7 @@ const CreateProduct = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [sizes, setSizes] = useState("");
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
 
@@ -46,6 +47,7 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
+      productData.append("sizes", sizes);
       const { data } = axios.post(
         "/api/v1/product/create-product",
         productData
@@ -119,6 +121,15 @@ const CreateProduct = () => {
                   placeholder="write a name"
                   className="form-control"
                   onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="mb-3">
+                <input
+                  type="text"
+                  value={sizes}
+                  placeholder="Write Availible sizes"
+                  className="form-control"
+                  onChange={(e) => setSizes(e.target.value)}
                 />
               </div>
               <div className="mb-3">

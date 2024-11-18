@@ -10,6 +10,7 @@ export const createProductController = async (req, res) => {
       price,
       category,
       quantity,
+      sizes,
       shipping,
     } = req.fields;
     const { photo } = req.files;
@@ -19,6 +20,8 @@ export const createProductController = async (req, res) => {
         return res.status(500).json({ error: "Name is Required" });
       case !description:
         return res.status(500).json({ error: "Description is Required" });
+      case !sizes:
+        return res.status(500).json({ error: "Sizes are Required" });
       case !price:
         return res.status(500).json({ error: "Price is Required" });
       case !category:
@@ -143,6 +146,7 @@ export const updateProductController = async (req, res) => {
       price,
       category,
       quantity,
+      sizes,
       shipping,
     } = req.fields;
     const { photo } = req.files;
@@ -151,6 +155,8 @@ export const updateProductController = async (req, res) => {
       case !name:
         return res.status(500).json({ error: "Name is Required" });
       case !description:
+        return res.status(500).json({ error: "Description is Required" });
+      case !sizes:
         return res.status(500).json({ error: "Description is Required" });
       case !price:
         return res.status(500).json({ error: "Price is Required" });
