@@ -104,11 +104,11 @@ export const productPhotoController = async (req, res) => {
     const product = await productModel.findById(req.params.pid).select("photo");
     if (product.photo.data) {
       res.set("Content-type", product.photo.contentType);
-      return res.status(200).json(product.photo.data);
+      return res.status(200).send(product.photo.data);
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       message: "Erorr while getting photo",
       error,
@@ -119,7 +119,7 @@ export const productPhotoController = async (req, res) => {
 //delete controller
 export const deleteProductController = async (req, res) => {
   try {
-    await productModel.findByIdAndDelete(req.params.pid).select("-photo");
+    await productModel.findByIdAndDelete(req.params.pid).select("photo");
     res.status(200).json({
       success: true,
       message: "Product Deleted successfully",
