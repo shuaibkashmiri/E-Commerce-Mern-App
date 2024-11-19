@@ -10,24 +10,21 @@ export const createProductController = async (req, res) => {
       price,
       category,
       quantity,
-      sizes,
       shipping,
     } = req.fields;
     const { photo } = req.files;
     //alidation
     switch (true) {
       case !name:
-        return res.status(500).json({ error: "Name is Required" });
+        return res.status(500).send({ error: "Name is Required" });
       case !description:
-        return res.status(500).json({ error: "Description is Required" });
-      case !sizes:
-        return res.status(500).json({ error: "Sizes are Required" });
+        return res.status(500).send({ error: "Description is Required" });
       case !price:
-        return res.status(500).json({ error: "Price is Required" });
+        return res.status(500).send({ error: "Price is Required" });
       case !category:
-        return res.status(500).json({ error: "Category is Required" });
+        return res.status(500).send({ error: "Category is Required" });
       case !quantity:
-        return res.status(500).json({ error: "Quantity is Required" });
+        return res.status(500).send({ error: "Quantity is Required" });
       case photo && photo.size > 1000000:
         return res
           .status(500)
@@ -40,14 +37,14 @@ export const createProductController = async (req, res) => {
       products.photo.contentType = photo.type;
     }
     await products.save();
-    res.status(201).json({
+    res.status(201).send({
       success: true,
       message: "Product Created Successfully",
       products,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       error,
       message: "Error in crearing product",
@@ -64,7 +61,7 @@ export const getProductController = async (req, res) => {
       .select("-photo")
       .limit(12)
       .sort({ createdAt: -1 });
-    res.status(200).json({
+    res.status(200).send({
       success: true,
       counTotal: products.length,
       message: "ALlProducts ",
@@ -72,7 +69,7 @@ export const getProductController = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       message: "Erorr in getting products",
       error: error.message,
@@ -86,14 +83,14 @@ export const getSingleProductController = async (req, res) => {
       .findOne({ slug: req.params.slug })
       .select("-photo")
       .populate("category");
-    res.status(200).json({
+    res.status(200).send({
       success: true,
       message: "Single Product Fetched",
       product,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       message: "Eror while getitng single product",
       error,
@@ -122,14 +119,14 @@ export const productPhotoController = async (req, res) => {
 //delete controller
 export const deleteProductController = async (req, res) => {
   try {
-    await productModel.findByIdAndDelete(req.params.pid).select("photo");
-    res.status(200).json({
+    await productModel.findByIdAndDelete(req.params.pid).select("-photo");
+    res.status(200).send({
       success: true,
       message: "Product Deleted successfully",
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    res.status(500).send({
       success: false,
       message: "Error while deleting product",
       error,
@@ -146,28 +143,25 @@ export const updateProductController = async (req, res) => {
       price,
       category,
       quantity,
-      sizes,
       shipping,
     } = req.fields;
     const { photo } = req.files;
     //alidation
     switch (true) {
       case !name:
-        return res.status(500).json({ error: "Name is Required" });
+        return res.status(500).send({ error: "Name is Required" });
       case !description:
-        return res.status(500).json({ error: "Description is Required" });
-      case !sizes:
-        return res.status(500).json({ error: "Description is Required" });
+        return res.status(500).send({ error: "Description is Required" });
       case !price:
-        return res.status(500).json({ error: "Price is Required" });
+        return res.status(500).send({ error: "Price is Required" });
       case !category:
-        return res.status(500).json({ error: "Category is Required" });
+        return res.status(500).send({ error: "Category is Required" });
       case !quantity:
-        return res.status(500).json({ error: "Quantity is Required" });
+        return res.status(500).send({ error: "Quantity is Required" });
       case photo && photo.size > 1000000:
         return res
           .status(500)
-          .json({ error: "photo is Required and should be less then 1mb" });
+          .send({ error: "photo is Required and should be less then 1mb" });
     }
 
     const products = await productModel.findByIdAndUpdate(
@@ -180,7 +174,7 @@ export const updateProductController = async (req, res) => {
       products.photo.contentType = photo.type;
     }
     await products.save();
-    res.status(201).json({
+    res.status(201).send({
       success: true,
       message: "Product Updated Successfully",
       products,
@@ -191,6 +185,71 @@ export const updateProductController = async (req, res) => {
       success: false,
       error,
       message: "Error in Updte product",
+    });
+  }
+};
+
+// filters
+export const productFiltersController = async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    const products = await productModel.find(args);
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "Error WHile Filtering Products",
+      error,
+    });
+  }
+};
+
+// product count
+export const productCountController = async (req, res) => {
+  try {
+    const total = await productModel.find({}).estimatedDocumentCount();
+    res.status(200).send({
+      success: true,
+      total,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      message: "Error in product count",
+      error,
+      success: false,
+    });
+  }
+};
+
+// product list base on page
+export const productListController = async (req, res) => {
+  try {
+    const perPage = 2;
+    const page = req.params.page ? req.params.page : 1;
+    const products = await productModel
+      .find({})
+      .select("-photo")
+      .skip((page - 1) * perPage)
+      .limit(perPage)
+      .sort({ createdAt: -1 });
+    res.status(200).send({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      success: false,
+      message: "error in per page ctrl",
+      error,
     });
   }
 };
