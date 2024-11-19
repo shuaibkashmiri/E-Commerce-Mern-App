@@ -2,6 +2,7 @@ import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../images/logo.png";
 import { useAuth } from "../../context/auth";
+import SearchInput from "../Form/SearchInput";
 import toast from "react-hot-toast";
 
 const Header = () => {
@@ -99,6 +100,8 @@ const Header = () => {
                   Cart (0)
                 </NavLink>
               </li>
+
+              <SearchInput />
             </ul>
           </div>
         </div>
