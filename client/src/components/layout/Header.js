@@ -7,6 +7,7 @@ import useCategory from "../../hooks/useCategory";
 import toast from "react-hot-toast";
 import { useCart } from "../../context/cart";
 import { Badge } from "antd";
+import { FaCartArrowDown } from "react-icons/fa";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
@@ -121,10 +122,10 @@ const Header = () => {
                   </li>
                 </>
               )}
-              <li className="nav-item">
+              <li className="nav-item mx-2">
                 <Badge count={cart?.length} showZero>
                   <NavLink to="/cart" className="nav-link">
-                    Cart
+                    <FaCartArrowDown className="cart" />
                   </NavLink>
                 </Badge>
               </li>

@@ -4,6 +4,7 @@ import {
   loginController,
   registerController,
   testController,
+  updateProfileController,
 } from "../controllers/authController.js";
 
 import { isAdmin, isAuthenticated } from "../middlewares/auth.js";
@@ -32,5 +33,8 @@ router.get("/user-auth", isAuthenticated, (req, res) => {
 router.get("/admin-auth", isAuthenticated, isAdmin, (req, res) => {
   res.status(200).json({ ok: true });
 });
+
+//update profile
+router.put("/profile", isAuthenticated, updateProfileController);
 
 export default router;

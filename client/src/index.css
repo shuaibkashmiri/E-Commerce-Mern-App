@@ -126,3 +126,72 @@
   height: 70vh;
   flex-direction: column;
 }
+
+.cart {
+  font-size: 24px;
+}
+
+/* Hero CSS Start */
+.hero-container {
+  padding-top: 15%;
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  background-image: url("./images/romain-gal-wQFu_HhOiYg-unsplash.jpg"); /* Replace with your image URL */
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #edf4f2;
+  margin-bottom: 0%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Dark overlay for text visibility */
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  text-align: center;
+  z-index: 1;
+  padding-bottom: 3%;
+  overflow: hidden;
+}
+
+.hero-content h1 {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  background-color: #31473a;
+  color: #edf4f2;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.hero-btn:hover {
+  background-color: #31473a;
+}
+
+/* Hero Css Ends */
+
+.primary {
+  background-color: #7c8363;
+  margin: 0;
+}
