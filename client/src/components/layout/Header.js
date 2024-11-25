@@ -13,6 +13,7 @@ const Header = () => {
   const [auth, setAuth] = useAuth();
   const categories = useCategory();
   const [cart] = useCart();
+
   const handleLogout = () => {
     setAuth({
       ...auth,
@@ -22,10 +23,16 @@ const Header = () => {
     localStorage.removeItem("auth");
     toast.success("Logout Successfully");
   };
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <div className="container-fluid">
+        <div className="container-fluid d-flex align-items-center">
+          {/* Always Visible Logo */}
+          <Link to={"/"} className="navbar-brand">
+            <img src={logo} alt="Logo" style={{ height: "70px" }} />
+          </Link>
+          {/* Navbar Toggler */}
           <button
             className="navbar-toggler"
             type="button"
@@ -37,16 +44,14 @@ const Header = () => {
           >
             <span className="navbar-toggler-icon" />
           </button>
+          {/* Collapsible Navigation Menu */}
           <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-            <Link to={"/"} className="navbar-brand">
-              <img src={logo} />
-            </Link>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <NavLink to="/" className="nav-link ">
+                <NavLink to="/" className="nav-link">
                   Home
                 </NavLink>
-              </li>{" "}
+              </li>
               <li className="nav-item dropdown">
                 <Link
                   className="nav-link dropdown-toggle"
@@ -62,7 +67,7 @@ const Header = () => {
                     </Link>
                   </li>
                   {categories?.map((c) => (
-                    <li>
+                    <li key={c.slug}>
                       <Link
                         className="dropdown-item"
                         to={`/category/${c.slug}`}
@@ -91,7 +96,6 @@ const Header = () => {
                   <li className="nav-item dropdown">
                     <NavLink
                       className="nav-link dropdown-toggle"
-                      href="#"
                       role="button"
                       data-bs-toggle="dropdown"
                       aria-expanded="false"

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
 import toast from "react-hot-toast";
+
 const ProductDetails = () => {
   const [cart, setCart] = useCart();
   const params = useParams();
@@ -11,11 +12,12 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  //initalp details
+  // Initial details
   useEffect(() => {
     if (params?.slug) getProduct();
   }, [params?.slug]);
-  //getProduct
+
+  // Get product details
   const getProduct = async () => {
     try {
       const { data } = await axios.get(
@@ -27,7 +29,8 @@ const ProductDetails = () => {
       console.log(error);
     }
   };
-  //get similar product
+
+  // Get similar products
   const getSimilarProduct = async (pid, cid) => {
     try {
       const { data } = await axios.get(
@@ -38,6 +41,16 @@ const ProductDetails = () => {
       console.log(error);
     }
   };
+
+  // Add product to cart
+  const addToCart = (product) => {
+    // Create a new cart array with the added product
+    const newCart = [...cart, product];
+    setCart(newCart); // Update cart state
+    localStorage.setItem("cart", JSON.stringify(newCart)); // Sync with local storage
+    toast.success("Item added to cart");
+  };
+
   return (
     <Layout>
       <div className="row container mt-2">
@@ -50,13 +63,18 @@ const ProductDetails = () => {
             width={"350px"}
           />
         </div>
-        <div className="col-md-6 ">
+        <div className="col-md-6">
           <h1 className="text-center">Product Details</h1>
           <h6>Name : {product.name}</h6>
           <h6>Description : {product.description}</h6>
-          <h6>Price : {product.price}</h6>
+          <h6>Price : ${product.price}</h6>
           <h6>Category : {product?.category?.name}</h6>
-          <button class="btn btn-secondary ms-1">ADD TO CART</button>
+          <button
+            className="btn btn-secondary ms-1"
+            onClick={() => addToCart(product)} // Use the function to add the product to the cart
+          >
+            ADD TO CART
+          </button>
         </div>
       </div>
       <hr />
@@ -67,7 +85,7 @@ const ProductDetails = () => {
         )}
         <div className="d-flex flex-wrap">
           {relatedProducts?.map((p) => (
-            <div className="card m-2" style={{ width: "18rem" }}>
+            <div className="card m-2" style={{ width: "18rem" }} key={p._id}>
               <img
                 src={`/api/v1/product/product-photo/${p?._id}`}
                 className="card-img-top"
@@ -85,11 +103,7 @@ const ProductDetails = () => {
                 </button>
                 <button
                   className="btn btn-dark ms-1"
-                  onClick={() => {
-                    setCart([...cart, p]);
-                    localStorage.setItem("cart", JSON.stringify([...cart, p]));
-                    toast.success("Item Added to cart");
-                  }}
+                  onClick={() => addToCart(p)} // Use the function to add this related product to the cart
                 >
                   ADD TO CART
                 </button>
