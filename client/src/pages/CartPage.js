@@ -160,7 +160,7 @@ const CartPage = () => {
                 )}
               </div>
             )}
-            <div className="mt-2">
+            <div className="mt-2 mb-2 ">
               {!clientToken || !cart?.length ? (
                 ""
               ) : (

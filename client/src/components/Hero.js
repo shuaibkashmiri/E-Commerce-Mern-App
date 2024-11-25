@@ -7,7 +7,7 @@ const Index = () => {
         <div className="overlay"></div>
         <div className="hero-content">
           <h1 className="heading">Adventure Awaits!</h1>
-          <p>Discover the perfect gear for your next adventure.</p>
+          <p>Elevate Your Outdoor Experience.</p>
           <Link to={"/categories"} className="hero-btn">
             Shop Now
           </Link>

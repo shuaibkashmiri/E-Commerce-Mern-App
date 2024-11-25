@@ -109,8 +109,8 @@ const HomePage = () => {
   return (
     <Layout title={"ALl Products - Best offers "}>
       <Hero />
-      <div className="container-fluid row pt-3 home-page primary">
-        <div className="col-md-3 filters">
+      <div className="d-flex flex-column pt-3  home-page primary">
+        {/* <div className="col-md-3 filters">
           <h4 className="text-center">Filter By Category</h4>
           <div className="d-flex flex-column">
             {categories?.map((c) => (
@@ -121,30 +121,30 @@ const HomePage = () => {
                 {c.name}
               </Checkbox>
             ))}
-          </div>
-          {/* price filter */}
-          <h4 className="text-center mt-4">Filter By Price</h4>
-          <div className="d-flex flex-column">
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
-              {Prices?.map((p) => (
-                <div key={p._id}>
-                  <Radio value={p.array}>{p.name}</Radio>
-                </div>
-              ))}
-            </Radio.Group>
-          </div>
-          <div className="d-flex flex-column">
-            <button
-              className="btn btn-danger"
-              onClick={() => window.location.reload()}
-            >
-              RESET FILTERS
-            </button>
-          </div>
+          </div> */}
+        {/* price filter */}
+        {/* <h4 className="text-center mt-4">Filter By Price</h4>
+        <div className="d-flex flex-column">
+          <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+            {Prices?.map((p) => (
+              <div key={p._id}>
+                <Radio value={p.array}>{p.name}</Radio>
+              </div>
+            ))}
+          </Radio.Group>
         </div>
-        <div className="col-md-9 ">
-          <h1 className="text-center">All Products</h1>
-          <div className="d-flex flex-wrap">
+        <div className="d-flex flex-column">
+          <button
+            className="btn btn-danger"
+            onClick={() => window.location.reload()}
+          >
+            RESET FILTERS
+          </button>
+        </div>
+      </div> */}
+        <h1 className="text-center">All Products</h1>
+        <div className="col">
+          <div className="d-flex flex-wrap m-5">
             {products?.map((p) => (
               <div className="card m-2" key={p._id}>
                 <img
@@ -158,7 +158,7 @@ const HomePage = () => {
                     <h5 className="card-title card-price">
                       {p.price.toLocaleString("en-US", {
                         style: "currency",
-                        currency: "USD",
+                        currency: "INR",
                       })}
                     </h5>
                   </div>
