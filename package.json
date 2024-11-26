@@ -1,5 +1,5 @@
 {
-  "name": "ecommerce-app",
+  "name": "Wild Spark ecommerce-app",
   "version": "1.0.0",
   "main": "server.js",
   "type": "module",
@@ -12,7 +12,7 @@
   "keywords": [],
   "author": "Shoaib Mushtaq Bhat",
   "license": "ISC",
-  "description": "Alpine Adventures Rest Api",
+  "description": "Wild Spark  Rest Api",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "braintree": "^3.26.0",

@@ -106,7 +106,7 @@ const HomePage = () => {
   };
 
   return (
-    <Layout title={"All Products - Best Offers"}>
+    <Layout title={"Wild Spark - All Products"}>
       <Hero />
       <div className="container py-5">
         <h1 className="text-center mb-4">All Products</h1>
