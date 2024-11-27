@@ -112,7 +112,7 @@ const Register = () => {
                     onChange={(e) => setAddress(e.target.value)}
                     className="form-control"
                     id="address"
-                    placeholder="Enter your address"
+                    placeholder="Enter Detailed Address With Pincode"
                     required
                   />
                 </div>
