@@ -117,7 +117,11 @@ const CreateProduct = () => {
                     <img
                       src={URL.createObjectURL(photo)}
                       alt="Product Preview"
-                      height="200px"
+                      style={{
+                        height: "200px", // Smaller preview height
+                        width: "auto", // Maintain aspect ratio
+                        objectFit: "contain", // Ensure the image fits the frame
+                      }}
                       className="img-thumbnail"
                     />
                   </div>

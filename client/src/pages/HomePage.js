@@ -105,6 +105,25 @@ const HomePage = () => {
     }
   };
 
+  const handleAddToCart = (product) => {
+    const updatedCart = [...cart];
+    const existingProductIndex = updatedCart.findIndex(
+      (item) => item._id === product._id
+    );
+
+    if (existingProductIndex !== -1) {
+      // Increase quantity if product already exists in the cart
+      updatedCart[existingProductIndex].quantity += 1;
+    } else {
+      // Add new product to cart with quantity 1
+      updatedCart.push({ ...product, quantity: 1 });
+    }
+
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    toast.success("Item added to cart!");
+  };
+
   return (
     <Layout title={"Wild Spark - All Products"}>
       <Hero />
@@ -139,14 +158,7 @@ const HomePage = () => {
                     </button>
                     <button
                       className="btn btn-primary w-100"
-                      onClick={() => {
-                        setCart([...cart, p]);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify([...cart, p])
-                        );
-                        toast.success("Item Added to Cart");
-                      }}
+                      onClick={() => handleAddToCart(p)}
                     >
                       Add to Cart
                     </button>

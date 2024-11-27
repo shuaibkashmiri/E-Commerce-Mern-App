@@ -15,36 +15,30 @@ const CartPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Total price
   const totalPrice = () => {
     try {
-      let total = 0;
-      cart?.forEach((item) => {
-        total += item.price * item.quantity;
-      });
-      return total.toLocaleString("en-IN", {
-        style: "currency",
-        currency: "INR",
-      });
+      return cart
+        .reduce((total, item) => total + item.price * item.quantity, 0)
+        .toLocaleString("en-IN", { style: "currency", currency: "INR" });
     } catch (error) {
       console.log(error);
+      return "0.00";
     }
   };
 
-  // Remove item from cart
   const removeCartItem = (pid) => {
     try {
-      let updatedCart = cart.filter((item) => item._id !== pid);
+      const updatedCart = cart.filter((item) => item._id !== pid);
       setCart(updatedCart);
       localStorage.setItem("cart", JSON.stringify(updatedCart));
+      toast.success("Item removed from cart!");
     } catch (error) {
       console.log(error);
     }
   };
 
-  // Increment product quantity if already in cart
   const addToCart = (product) => {
-    let updatedCart = [...cart];
+    const updatedCart = [...cart];
     const index = updatedCart.findIndex((item) => item._id === product._id);
     if (index !== -1) {
       updatedCart[index].quantity += 1;
@@ -53,9 +47,25 @@ const CartPage = () => {
     }
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
+    toast.success("Item quantity updated!");
   };
 
-  // Get payment gateway token
+  const decreaseQuantity = (product) => {
+    const updatedCart = [...cart];
+    const index = updatedCart.findIndex((item) => item._id === product._id);
+    if (index !== -1) {
+      if (updatedCart[index].quantity > 1) {
+        updatedCart[index].quantity -= 1;
+      } else {
+        // Remove the item if quantity reaches 1
+        updatedCart.splice(index, 1);
+        toast.success("Item removed from cart!");
+      }
+    }
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
   const getToken = async () => {
     try {
       const { data } = await axios.get("/api/v1/product/braintree/token");
@@ -69,7 +79,6 @@ const CartPage = () => {
     getToken();
   }, [auth?.token]);
 
-  // Handle payments
   const handlePayment = async () => {
     try {
       setLoading(true);
@@ -91,27 +100,27 @@ const CartPage = () => {
 
   return (
     <Layout>
-      <div className="container py-4">
-        <div className="row mb-4">
-          <div className="col-12 text-center">
-            <h1 className="bg-light py-3">{`Hello, ${
-              auth?.token && auth?.user?.name
-            }`}</h1>
-            <h4>
-              {cart?.length
-                ? `You have ${cart.length} items in your cart ${
-                    auth?.token ? "" : ", please log in to checkout"
-                  }`
-                : "Your Cart is Empty"}
-            </h4>
-          </div>
+      <div className="container py-5">
+        {/* Header */}
+        <div className="text-center mb-5">
+          <h1 className="bg-light p-3">{`Hello, ${
+            auth?.token && auth?.user?.name
+          }`}</h1>
+          <h4>
+            {cart?.length
+              ? `You have ${cart.length} items in your cart ${
+                  auth?.token ? "" : ", please log in to checkout"
+                }`
+              : "Your Cart is Empty"}
+          </h4>
         </div>
+
         <div className="row">
           {/* Cart Items */}
           <div className="col-md-8">
             {cart?.map((item) => (
-              <div className="card mb-3 shadow-sm" key={item._id}>
-                <div className="row g-0 align-items-center">
+              <div className="card mb-4 shadow-sm" key={item._id}>
+                <div className="row g-0">
                   <div className="col-md-4">
                     <img
                       src={`/api/v1/product/product-photo/${item._id}`}
@@ -122,7 +131,7 @@ const CartPage = () => {
                   <div className="col-md-8">
                     <div className="card-body">
                       <h5 className="card-title">{item.name}</h5>
-                      <p className="card-text">
+                      <p className="card-text text-muted">
                         {item.description.substring(0, 50)}...
                       </p>
                       <p className="card-text">
@@ -142,6 +151,12 @@ const CartPage = () => {
                         Remove
                       </button>
                       <button
+                        className="btn btn-warning btn-sm me-2"
+                        onClick={() => decreaseQuantity(item)}
+                      >
+                        Decrease
+                      </button>
+                      <button
                         className="btn btn-success btn-sm"
                         onClick={() => addToCart(item)}
                       >
@@ -153,6 +168,7 @@ const CartPage = () => {
               </div>
             ))}
           </div>
+
           {/* Cart Summary */}
           <div className="col-md-4">
             <div className="card shadow-sm p-4">
