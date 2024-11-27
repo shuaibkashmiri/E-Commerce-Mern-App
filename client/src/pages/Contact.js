@@ -28,7 +28,7 @@ const Contact = () => {
             <ul className="list-unstyled mt-4">
               <li className="mb-3">
                 <BiMailSend className="text-primary me-2" />
-                <span className="text-dark">help@adventureoutfits.com</span>
+                <span className="text-dark">help@wildspark.com</span>
               </li>
               <li className="mb-3">
                 <BiPhoneCall className="text-success me-2" />

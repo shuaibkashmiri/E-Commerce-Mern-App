@@ -12,12 +12,11 @@ const ProductDetails = () => {
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
 
-  // Initial details
+  // Fetch product details and similar products
   useEffect(() => {
     if (params?.slug) getProduct();
   }, [params?.slug]);
 
-  // Get product details
   const getProduct = async () => {
     try {
       const { data } = await axios.get(
@@ -26,90 +25,110 @@ const ProductDetails = () => {
       setProduct(data?.product);
       getSimilarProduct(data?.product._id, data?.product.category._id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  // Get similar products
   const getSimilarProduct = async (pid, cid) => {
     try {
       const { data } = await axios.get(
         `/api/v1/product/related-product/${pid}/${cid}`
       );
-      setRelatedProducts(data?.products);
+      setRelatedProducts(data?.products || []);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  // Add product to cart
   const addToCart = (product) => {
-    // Create a new cart array with the added product
     const newCart = [...cart, product];
-    setCart(newCart); // Update cart state
-    localStorage.setItem("cart", JSON.stringify(newCart)); // Sync with local storage
+    setCart(newCart);
+    localStorage.setItem("cart", JSON.stringify(newCart));
     toast.success("Item added to cart");
   };
 
   return (
     <Layout>
-      <div className="row container mt-2">
-        <div className="col-md-6">
-          <img
-            src={`/api/v1/product/product-photo/${product._id}`}
-            className="card-img-top"
-            alt={product.name}
-            height="300"
-            width={"350px"}
-          />
+      <div className="container mt-5">
+        {/* Product Details */}
+        <div className="row align-items-center mb-5">
+          <div className="col-md-6 text-center">
+            <img
+              src={`/api/v1/product/product-photo/${product._id}`}
+              className="img-fluid rounded shadow"
+              alt={product.name}
+              style={{ maxHeight: "400px", objectFit: "cover" }}
+            />
+          </div>
+          <div className="col-md-6">
+            <h1>Product Details</h1>
+            <h6>
+              <strong>Name:</strong> {product.name}
+            </h6>
+            <h6>
+              <strong>Description:</strong> {product.description}
+            </h6>
+            <h6>
+              <strong>Price:</strong> ₹ {product.price}
+            </h6>
+            <h6>
+              <strong>Category:</strong> {product?.category?.name}
+            </h6>
+            <button
+              className="btn btn-secondary mt-3"
+              onClick={() => addToCart(product)}
+            >
+              ADD TO CART
+            </button>
+          </div>
         </div>
-        <div className="col-md-6">
-          <h1 className="text-center">Product Details</h1>
-          <h6>Name : {product.name}</h6>
-          <h6>Description : {product.description}</h6>
-          <h6>Price : ₹ {product.price}</h6>
-          <h6>Category : {product?.category?.name}</h6>
-          <button
-            className="btn btn-secondary ms-1"
-            onClick={() => addToCart(product)} // Use the function to add the product to the cart
-          >
-            ADD TO CART
-          </button>
-        </div>
-      </div>
-      <hr />
-      <div className="row container">
-        <h6>Similar Products</h6>
-        {relatedProducts.length < 1 && (
-          <p className="text-center">No Similar Products found</p>
-        )}
-        <div className="d-flex flex-wrap">
-          {relatedProducts?.map((p) => (
-            <div className="card m-2" style={{ width: "18rem" }} key={p._id}>
-              <img
-                src={`/api/v1/product/product-photo/${p?._id}`}
-                className="card-img-top"
-                alt={p.name}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{p.name}</h5>
-                <p className="card-text">{p.description.substring(0, 30)}...</p>
-                <p className="card-text"> ₹ {p.price}</p>
-                <button
-                  className="btn btn-primary ms-1"
-                  onClick={() => navigate(`/product/${p.slug}`)}
-                >
-                  More Details
-                </button>
-                <button
-                  className="btn btn-dark ms-1"
-                  onClick={() => addToCart(p)} // Use the function to add this related product to the cart
-                >
-                  ADD TO CART
-                </button>
-              </div>
+
+        <hr />
+
+        {/* Similar Products */}
+        <div>
+          <h4 className="mb-4">Similar Products</h4>
+          {relatedProducts.length === 0 ? (
+            <p className="text-center">No similar products found</p>
+          ) : (
+            <div className="row">
+              {relatedProducts.map((p) => (
+                <div key={p._id} className="col-md-4 col-sm-6 mb-4">
+                  <div className="card shadow-sm h-100 d-flex flex-column">
+                    <img
+                      src={`/api/v1/product/product-photo/${p?._id}`}
+                      className="card-img-top"
+                      alt={p.name}
+                      style={{ objectFit: "cover", height: "200px" }}
+                    />
+                    <div className="card-body d-flex flex-column justify-content-between">
+                      <div>
+                        <h5 className="card-title">{p.name}</h5>
+                        <p className="card-text">
+                          {p.description.substring(0, 30)}...
+                        </p>
+                        <p className="card-text fw-bold">₹ {p.price}</p>
+                      </div>
+                      <div className="mt-3 d-flex justify-content-between">
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => navigate(`/product/${p.slug}`)}
+                        >
+                          More Details
+                        </button>
+                        <button
+                          className="btn btn-secondary"
+                          onClick={() => addToCart(p)}
+                        >
+                          ADD TO CART
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       </div>
     </Layout>
