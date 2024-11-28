@@ -5,11 +5,10 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
 
-const ForgotPasssword = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [answer, setAnswer] = useState("");
-
   const navigate = useNavigate();
 
   // form function
@@ -23,7 +22,6 @@ const ForgotPasssword = () => {
       });
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
-
         navigate("/login");
       } else {
         toast.error(res.data.message);
@@ -33,53 +31,75 @@ const ForgotPasssword = () => {
       toast.error("Something went wrong");
     }
   };
+
   return (
     <Layout title={"Forgot Password - Ecommerce APP"}>
-      <div className="form-container ">
-        <form onSubmit={handleSubmit}>
-          <h4 className="title">RESET PASSWORD</h4>
+      <div className="container d-flex justify-content-center align-items-center min-vh-100">
+        <div
+          className="card shadow-sm p-4"
+          style={{ maxWidth: "400px", width: "100%" }}
+        >
+          <h4 className="text-center mb-4">Reset Your Password</h4>
+          <form onSubmit={handleSubmit}>
+            {/* Email input */}
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="form-control"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
 
-          <div className="mb-3">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="form-control"
-              id="exampleInputEmail1"
-              placeholder="Enter Your Email "
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="text"
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              className="form-control"
-              id="exampleInputEmail1"
-              placeholder="Enter Your favorite Sport Name "
-              required
-            />
-          </div>
-          <div className="mb-3">
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="form-control"
-              id="exampleInputPassword1"
-              placeholder="Enter Your Password"
-              required
-            />
-          </div>
+            {/* Security question input */}
+            <div className="mb-3">
+              <label htmlFor="answer" className="form-label">
+                Favorite Sport Name
+              </label>
+              <input
+                type="text"
+                id="answer"
+                className="form-control"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                placeholder="Enter your favorite sport name"
+                required
+              />
+            </div>
 
-          <button type="submit" className="btn btn-primary">
-            RESET
-          </button>
-        </form>
+            {/* New password input */}
+            <div className="mb-3">
+              <label htmlFor="newPassword" className="form-label">
+                New Password
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                className="form-control"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Enter your new password"
+                required
+              />
+            </div>
+
+            {/* Submit button */}
+            <div className="d-grid">
+              <button type="submit" className="btn btn-primary">
+                Reset Password
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </Layout>
   );
 };
 
-export default ForgotPasssword;
+export default ForgotPassword;
